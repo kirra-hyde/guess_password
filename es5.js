@@ -5,11 +5,11 @@ var city = 'San Francisco';
 
 console.log(
   fname +
-    ' lives in ' +
-    city +
-    ' and their favorite color is ' +
-    favoriteColor +
-    '.'
+  ' lives in ' +
+  city +
+  ' and their favorite color is ' +
+  favoriteColor +
+  '.'
 );
 
 // 1. Refactor to ES2015 Template Literals:
@@ -32,18 +32,15 @@ var foods = {
   }
 };
 
-var apple = foods.fruits.apple;
-var banana = foods.fruits.banana;
 
+const { apple, banana } = foods.fruits;
 // 3. Refactor to ES2015 Object Destructuring
 
 
 
 // 4. ES5 Map Callback
 function double(nums) {
-  return nums.map(function (num) {
-    return num * 2;
-  });
+  return nums.map(num => num * 2);
 }
 
 // 4. Refactor to ES2015 Arrow Functions Shorthand
@@ -51,13 +48,8 @@ function double(nums) {
 
 
 // 5. ES5 Default Arguments
-function add(a, b) {
-  if (a === undefined) {
-    a = 10;
-  }
-  if (b === undefined) {
-    b = 10;
-  }
+function add(a = 10, b = 10) {
+
   return a + b;
 }
 
@@ -66,13 +58,9 @@ function add(a, b) {
 
 
 // 6. ES5 Function that takes a variable number of arguments
-function onlyEvens() {
-  // in ES5, this is how we turned something
-  // array-like into an actual array
-  var nums = Array.prototype.slice.call(arguments); 
-  return nums.filter(function (num) {
-    return num % 2 === 0;
-  });
+function onlyEvens(...nums) {
+
+  return nums.filter(num => num % 2 === 0);
 }
 
 // 6. Refactor to ES2015
