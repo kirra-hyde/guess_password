@@ -1,16 +1,17 @@
-var WORD_COUNT = 10;
-var guessCount = 4;
-var password = "";
+const WORD_COUNT = 10;
+let guessCount = 4;
+let password = "";
 
-var startButton = document.getElementById("start");
+const startButton = document.getElementById("start");
 
 
 /** Toggle classes on `elem`. This takes an arbirtrary number of classes. */
 
-function toggleClasses(element) {
-  for (var i = 1; i < arguments.length; i++) {
-    element.classList.toggle(arguments[i]);
+function toggleClasses(element, ...classes) {
+  for (let classs of classes) {
+    element.classList.toggle(classs);
   }
+
 }
 
 
@@ -28,14 +29,15 @@ function startGame() {
   toggleClasses(document.getElementById("game-screen"), "hide", "show");
 
   // get random words and append them to the DOM
-  var wordList = document.getElementById("word-list");
-  var randomWords = getSample(words, WORD_COUNT);
+  const wordList = document.getElementById("word-list");
+  const randomWords = getSample(words, WORD_COUNT);
 
-  randomWords.forEach(function (word) {
-    var li = document.createElement("li");
+
+  for (let word of randomWords) {
+    const li = document.createElement("li");
     li.innerText = word;
     wordList.appendChild(li);
-  });
+  }
 
   password = getSample(randomWords, 1)[0];
   setGuessCount(guessCount);
@@ -55,16 +57,14 @@ function getSample(array, n) {
 /** Returns new array from `array`, shuffled. */
 
 function shuffle(array) {
-  var arrayCopy = array.slice();
+  const arrayCopy = array.slice();
 
-  for (var idx1 = arrayCopy.length - 1; idx1 > 0; idx1--) {
+  for (let idx1 = arrayCopy.length - 1; idx1 > 0; idx1--) {
     // generate a random index between 0 and idx1 (inclusive)
-    var idx2 = Math.floor(Math.random() * (idx1 + 1));
+    const idx2 = Math.floor(Math.random() * (idx1 + 1));
 
     // swap elements at idx1 and idx2
-    var temp = arrayCopy[idx1];
-    arrayCopy[idx1] = arrayCopy[idx2];
-    arrayCopy[idx2] = temp;
+    [arrayCopy[idx1], arrayCopy[idx2]] = [arrayCopy[idx2], arrayCopy[idx1]]
   }
 
   return arrayCopy;
@@ -76,7 +76,7 @@ function shuffle(array) {
 function setGuessCount(newCount) {
   guessCount = newCount;
   document.getElementById("guesses-remaining").innerText =
-      "Guesses remaining: " + guessCount + ".";
+      `Guesses remaining: ${guessCount}.`;
 }
 
 
@@ -96,19 +96,17 @@ function handleGuess(evt) {
     return;
   }
 
-  var guessedWord = listItem.innerText;
-  var similarityScore = getSimilarityScore(guessedWord, password);
+  const guessedWord = listItem.innerText;
+  const similarityScore = getSimilarityScore(guessedWord, password);
   listItem.classList.add("disabled");
   listItem.innerText =
-      guessedWord + " --> Matching Letters: " + similarityScore;
+      `${guessedWord} --> Matching Letters: ${similarityScore}`;
   setGuessCount(guessCount - 1);
 
   if (similarityScore === password.length) {
-    document.getElementById("winner").classList.remove("hide");
-    document.getElementById("winner").classList.add("show");
+    toggleClasses(document.getElementById("winner"), "hide", "show")
   } else if (guessCount === 0) {
-    document.getElementById("loser").classList.remove("hide");
-    document.getElementById("loser").classList.add("show");
+    toggleClasses(document.getElementById("loser"), "hide", "show")
   }
 }
 
@@ -119,9 +117,9 @@ function getSimilarityScore(word1, word2) {
   console.assert(word1.length === word2.length,
       "Words must have the same length!");
 
-  var numCommon = 0;
+  let numCommon = 0;
 
-  for (var i = 0; i < word1.length; i++) {
+  for (let i = 0; i < word1.length; i++) {
     if (word1[i] === word2[i]) numCommon += 1;
   }
 
